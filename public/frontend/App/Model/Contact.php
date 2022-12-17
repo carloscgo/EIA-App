@@ -7,7 +7,6 @@ use App\Lib\Connection;
 class Contact extends Connection
 {
     private static $table = "contacts";
-    private static $successMessage = "Contact list";
     private static $data = [];
 
     public static function all()
@@ -25,18 +24,48 @@ class Contact extends Connection
 
             if ($row = self::fetchArray($rs)) {
                 $status = true;
-                $message = self::$successMessage;
+                $message = 'Contact list';
                 $data = $row;
             }
         } catch (\Exception $e) {
             $message = self::$messages->CONNECTION->error . '\n' . $e->getMessage();
         }
 
-        return json_encode([
+        return [
             'status' => $status,
             'message' => $message,
             'data' => $data
-        ]);
+        ];
+    }
+
+    public static function findById(int $id)
+    {
+        $status = false;
+        $message = self::$messages->CONNECTION->noRecords;
+        $data = [];
+
+        try {
+            $sql = "SELECT id, firstname, lastname, email, phone, created_at, updated_at
+				FROM %s
+				WHERE deleted_at IS NULL
+                    AND id = %d";
+
+            $rs = self::query(sprintf($sql, self::$table, $id));
+
+            if ($row = self::fetchSingle($rs)) {
+                $status = true;
+                $message = 'A single contact';
+                $data = $row;
+            }
+        } catch (\Exception $e) {
+            $message = self::$messages->CONNECTION->error . '\n' . $e->getMessage();
+        }
+
+        return [
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ];
     }
 
     public static function add($post)
@@ -46,16 +75,5 @@ class Contact extends Connection
         self::$data[] = $post;
 
         return $post;
-    }
-
-    public static function findById(int $id)
-    {
-        foreach (self::$data as $post) {
-            if ($post->id === $id) {
-                return $post;
-            }
-        }
-
-        return [];
     }
 }

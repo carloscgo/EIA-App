@@ -13,8 +13,13 @@ class Contacts
         $this->model = new Model();
     }
 
-    public function indexAction()
+    public function allAction()
     {
         return $this->model::all();
+    }
+
+    public function findAction(int $id)
+    {
+        return $this->model::findById($id);
     }
 }

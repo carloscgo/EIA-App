@@ -101,6 +101,21 @@ class Connection
 		}
 	}
 
+	public static function fetchSingle($rsConn = null)
+	{
+		try {
+			if ($rsConn) {
+				return (object) $rsConn->fetch_assoc();
+			} else {
+				return 0;
+			}
+		} catch (\Exception $e) {
+			self::$error = $e->getMessage();
+
+			return 0;
+		}
+	}
+
 	public static function affectedRows()
 	{
 		try {
@@ -211,6 +226,10 @@ class Connection
 		}
 
 		try {
+			if (self::checkFieldExists('updated_at', $tabla)) {
+				$set .= ", updated_at = now()";
+			}
+
 			$query = self::utf8EncodeSecure("UPDATE `$tabla` SET " . trim($set) . " WHERE $where");
 
 			self::$queryID = self::$connection->query($query);
@@ -285,43 +304,6 @@ class Connection
 			$rs = self::query("SHOW FIELDS FROM `$tabla` WHERE FIELD = '$field'");
 
 			return (self::getNumRows($rs) > 0 ? 1 : 0);
-		} catch (\Exception $e) {
-			self::$error = $e->getMessage() . ': ' . $e->getCode();
-
-			return 0;
-		}
-	}
-
-	public static function showData($tabla, $where)
-	{
-		if ($tabla == "") {
-			throw new \Exception('No ha especificado la tabla', 701);
-
-			return 0;
-		}
-		if ($where == "") {
-			throw new \Exception('No ha especificado la condicion de la consulta', 702);
-
-			return 0;
-		}
-
-		try {
-			$sql = self::utf8EncodeSecure("SELECT * FROM `$tabla` WHERE $where");
-			self::$queryID = self::$connection->query($sql);
-
-			if (self::$queryID) {
-				$data = '<br>';
-
-				$fetch = array();
-
-				while ($fetch = self::$queryID->fetch_assoc()) {
-					$data .= "(TABLA AFECTADA `$tabla`, CONDICION $where) DATA: " . print_r($fetch, true) . "<br>";
-				}
-
-				return $data;
-			} else {
-				return 0;
-			}
 		} catch (\Exception $e) {
 			self::$error = $e->getMessage() . ': ' . $e->getCode();
 

@@ -21,8 +21,12 @@ Router::get('/post/([0-9]*)', function (Request $req, Response $res) {
     ]);
 });
 
-Router::get('/get-contacts', function (Request $req, Response $res) {
-    $res->toJSON((new Contacts())->indexAction());
+Router::get('/contacts', function (Request $req, Response $res) {
+    $res->toJSON((new Contacts())->allAction());
+});
+
+Router::get('/contacts/([0-9]*)', function (Request $req, Response $res) {
+    $res->toJSON((new Contacts())->findAction($req->params[0]));
 });
 
 App::run();
