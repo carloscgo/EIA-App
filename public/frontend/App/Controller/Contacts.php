@@ -2,12 +2,19 @@
 
 namespace App\Controller;
 
+use App\Model\Contact as Model;
+
 class Contacts
 {
+    private $model;
+
+    public function __construct()
+    {
+        $this->model = new Model();
+    }
+
     public function indexAction()
     {
-        // you could add the twig package 'composer require "twig/twig:^2.0"' 
-        // and use it as "echo $twig->render('index', ['name' => 'Fabien']);"
-        echo 'Contacts';
+        return $this->model::all();
     }
 }
