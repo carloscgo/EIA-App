@@ -25,5 +25,4 @@ Router::get('/get-contacts', function () {
     (new Contacts())->indexAction();
 });
 
-
 App::run();
