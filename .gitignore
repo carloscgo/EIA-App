@@ -3,5 +3,3 @@
 *.log
 npm-debug.log
 yarn-error.log
-/data/mariadb/*
-/data/mongodb/*
