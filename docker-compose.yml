@@ -1,0 +1,114 @@
+version: "2"
+services:
+
+  back:
+    build:
+      context: ./config/php5.6
+      dockerfile: Dockerfile
+    container_name: "back"
+    depends_on:
+      - mariadb
+      - mongodb
+      - redis
+    ports:
+      - "8099:80"
+    networks:
+      test-net:
+         ipv4_address: 172.10.0.10
+    volumes:
+      - "./public/backend:/var/www/html:rw"
+      - "./config/php5.6/php.ini:/etc/php.d/php.ini"
+
+  front:
+    build:
+      context: ./config/php7.4
+      dockerfile: Dockerfile
+    container_name: "front"
+    depends_on:
+      - mariadb
+      - mongodb
+      - redis
+    ports:
+      - "8083:80"
+    networks:
+      test-net:
+         ipv4_address: 172.10.0.11
+    volumes:
+      - "./public/frontend:/var/www/html:rw"
+      - "./config/php7.4/php.ini:/etc/php.d/php.ini"
+
+  nginx:
+    container_name: "nginx"
+    restart: always
+    build:
+      context: ./config/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      test-net:
+         ipv4_address: 172.10.0.12
+
+  mysqladmin:
+    image: phpmyadmin
+    container_name: "mysqladmin"
+    depends_on:
+      - mariadb
+    restart: always
+    ports:
+      - "8088:80"
+    networks:
+      test-net:
+         ipv4_address: 172.10.0.13
+    volumes:
+      - "./config/php7.4/php.ini:/usr/local/etc/php/conf.d/extra_php.ini"
+    environment:
+      PMA_ARBITRARY: 1
+
+  mariadb:
+    image: mariadb:10.4
+    container_name: "mariadb"
+    restart: always
+    command: "--max_allowed_packet=4096M --default-authentication-plugin=mysql_native_password"
+    environment:
+      MARIADB_ROOT_PASSWORD: secret
+      MARIADB_DATABASE: db
+      MARIADB_USER: user
+      MARIADB_PASSWORD: secret
+    volumes:
+      - "./data/mariadb:/var/lib/mysql"
+      - "./config/mariadb/my.cnf:/etc/mysql/conf.d/my.cnf"
+    ports:
+      - "3307:3306"
+    networks:
+      test-net:
+         ipv4_address: 172.10.0.14
+
+  mongodb:
+    image: mongo:5.0.12
+    container_name: "mongodb"
+    restart: always
+    ports:
+      - "27117:27017"
+    networks:
+      test-net:
+         ipv4_address: 172.10.0.15
+    volumes:
+      - "./data/mongodb:/data/db"
+
+  redis:
+    container_name: "redis"
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      test-net:
+         ipv4_address: 172.10.0.16
+
+networks:
+  test-net:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.10.0.0/16
+         gateway: 172.10.0.1

@@ -1,0 +1,22 @@
+{
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Carlos Camacho",
+			"email": "carloscgo123@gmail.com",
+			"homepage": "http://www.linkedin.com/in/carlos-camacho-29755043",
+			"role": "Developer"
+		}
+	],
+	"autoload": {
+		"classmap": [
+			"./controllers/contacts"
+		],
+		"files": [
+			"../include/config.php",
+			"../include/clase_db.inc.php",
+			"../include/funciones.php",
+			"../include/session_header_admin.php"
+		]
+	}
+}
