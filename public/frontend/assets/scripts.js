@@ -20,6 +20,22 @@ const toast = (title, message, className) => {
     $('#toast .toast-header').toggleClass(className)
 }
 
+const modal = (contact) => {
+    const modalQuestion = new bootstrap.Modal('#modal-question')
+
+    modalQuestion.show()
+
+    $('#modal-question .modal-body span').text(`${contact.firstname} ${contact.lastname}`)
+
+    $('#btn-delete-contact').on('click', function () {
+        deleteContact(contact.id, function () {
+            modalQuestion.hide()
+
+            loadContacts()
+        })
+    })
+}
+
 const preventSubmit = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -63,11 +79,15 @@ const validForm = () => {
         !$('#phone').val())
 }
 
-const checkResponse = (response) => {
+const checkResponse = (response, callback = undefined) => {
     if (response.status) {
         toast('Success', response.message, 'text-bg-success')
 
         cleanForm()
+
+        if (typeof callback === 'function') {
+            callback()
+        }
     } else {
         toast('Error', response.message, 'text-bg-danger')
     }
@@ -84,6 +104,8 @@ const loadContacts = () => {
         },
         beforeSend: function () {
             loading(true);
+
+            $('#content tbody').html('')
         },
         success: function (response) {
             if (response.status) {
@@ -107,12 +129,12 @@ const loadContacts = () => {
                 </tr>
               `)
 
-                    $(`#contact-${item.id} .btn-edit`).on('click', function (e) {
+                    $(`#contact-${item.id} .btn-edit`).on('click', function () {
                         $(this).prop('href', `/contact/edit/${item.id}`)
                     })
 
-                    $(`#contact-${item.id} .btn-delete`).on('click', function (e) {
-                        console.log(item.id, e)
+                    $(`#contact-${item.id} .btn-delete`).on('click', function () {
+                        modal(item)
                     })
                 })
             } else {
@@ -208,6 +230,31 @@ const updateContact = (event, id) => {
         },
         success: function (response) {
             checkResponse(response)
+        },
+        complete: function () {
+            loading(false);
+        }
+    });
+}
+
+const deleteContact = (id, callback) => {
+    if (!id) {
+        return
+    }
+
+    $.ajax({
+        url: `/api/contacts/${id}`,
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'DELETE',
+        error: function (jqXHR, textStatus, errorThrown) {
+            toast('Error', jqXHR + " " + textStatus + " " + errorThrown, 'text-bg-danger')
+        },
+        beforeSend: function () {
+            loading(true);
+        },
+        success: function (response) {
+            checkResponse(response, callback)
         },
         complete: function () {
             loading(false);

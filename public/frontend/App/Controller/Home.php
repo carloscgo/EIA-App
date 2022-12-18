@@ -22,6 +22,7 @@ $hostAPI = Config::get('CONNECTION')['API']['host'];
 <body>
   <?php include_once __DIR__ . '/../Partials/loading.html' ?>
   <?php include_once __DIR__ . '/../Partials/toast.html' ?>
+  <?php include_once __DIR__ . '/../Partials/modal.html' ?>
   <?php include_once __DIR__ . '/../Partials/navbar.html' ?>
 
   <main id="content" class="container">
