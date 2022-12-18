@@ -15,20 +15,6 @@ trait TraitMySQL
     private static $queryID = null;
     public static $messages = [];
 
-    /* public function __construct()
-    {
-        $config = Config::get('CONNECTION')['MYSQL'];
-        self::$server = $config['host'];
-        self::$encoding    = $config['charset'];
-        self::$user = $config['username'];
-        self::$password = $config['password'];
-        self::$db = $config['dbname'];
-
-        self::$messages = json_decode(json_encode(Config::get('MESSAGES')));
-
-        $this->connectionMySQL();
-    } */
-
     public static function getError()
     {
         return self::$error;

@@ -8,6 +8,7 @@ use App\Lib\Request;
 use App\Lib\Response;
 
 use App\Controller\Contacts;
+use App\Controller\Connection;
 
 Router::get('/', function () {
   require_once __DIR__ . '/App/Controller/Home.php';
@@ -69,6 +70,24 @@ Router::delete('/api/contacts/([0-9]*)', function ($request) {
   $contact = new Contacts();
 
   $res->status(200)->toJSON($contact->deleteAction($req->getJSON(), $req->params[0]));
+});
+
+
+Router::get('/api/connection', function () {
+  $res = new Response();
+
+  $connection = new Connection();
+
+  $res->status(200)->toJSON($connection->getAction());
+});
+
+Router::put('/api/connection', function () {
+  $req = new Request();
+  $res = new Response();
+
+  $connection = new Connection();
+
+  $res->status(200)->toJSON($connection->setAction($req->getJSON()->type));
 });
 
 Router::get('/api/(.*)', function () {

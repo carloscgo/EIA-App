@@ -2,6 +2,7 @@
 
 return [
     'CONNECTION' => [
+        'DEFAULT' => 'MYSQL',
         'MYSQL' => [
             'adapter'     => 'Mysql',
             'host'        => 'mariadb',

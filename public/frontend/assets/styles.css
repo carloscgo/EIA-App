@@ -13,7 +13,7 @@ nav .active .bi::before {
     color: var(--bs-cyan) !important;
 }
 
-nav *:not(input[type="search"]):not(.active) {
+nav *:not(input[type="search"]):not(.active):not(.form-select):not(.form-select option) {
     color: var(--bs-white) !important;
 }
 

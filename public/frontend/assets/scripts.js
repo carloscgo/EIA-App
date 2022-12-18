@@ -270,3 +270,62 @@ const deleteContact = (id, callback) => {
         }
     });
 }
+
+const changeTypeConnection = () => {
+    $.ajax({
+        url: `/api/connection`,
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'GET',
+        error: function (jqXHR, textStatus, errorThrown) {
+            toast('Error', jqXHR + " " + textStatus + " " + errorThrown, 'text-bg-danger')
+        },
+        beforeSend: function () {
+            loading(true);
+        },
+        success: function (response) {
+            if (response.status) {
+                $('#type-connection').val(response.data)
+            } else {
+                toast('Error', response.message, 'text-bg-danger')
+            }
+        },
+        complete: function () {
+            loading(false);
+        }
+    });
+
+    $('#type-connection').on('change', function () {
+        const type = $(this).val()
+
+        if (!['MYSQL', 'MONGO'].includes(type)) {
+            return
+        }
+
+        $.ajax({
+            url: `/api/connection`,
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'PUT',
+            data: JSON.stringify({
+                type
+            }),
+            error: function (jqXHR, textStatus, errorThrown) {
+                toast('Error', jqXHR + " " + textStatus + " " + errorThrown, 'text-bg-danger')
+            },
+            beforeSend: function () {
+                loading(true);
+            },
+            success: function (response) {
+                checkResponse(response, () => {
+                    window.location.reload()
+                })
+            },
+            complete: function () {
+                loading(false);
+            }
+        });
+    })
+}
+
+changeTypeConnection()

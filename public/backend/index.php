@@ -11,7 +11,8 @@ use App\Controller\Contacts;
 
 Router::get('/contacts', function () {
     $res = new Response();
-    $contact = new Contacts();
+
+    $contact = new Contacts(getTypeConnection());
 
     $res->toJSON($contact->allAction());
 });
@@ -19,7 +20,7 @@ Router::get('/contacts', function () {
 Router::get('/contacts/([0-9]*)', function ($request) {
     $req = new Request($request->params);
     $res = new Response();
-    $contact = new Contacts();
+    $contact = new Contacts(getTypeConnection());
 
     $res->toJSON($contact->findAction($req->params[0]));
 });
@@ -27,7 +28,7 @@ Router::get('/contacts/([0-9]*)', function ($request) {
 Router::post('/contacts', function ($request) {
     $req = new Request($request->params);
     $res = new Response();
-    $contact = new Contacts();
+    $contact = new Contacts(getTypeConnection());
 
     $response = $contact->newAction($req->getJSON());
 
@@ -37,7 +38,7 @@ Router::post('/contacts', function ($request) {
 Router::put('/contacts/([0-9]*)', function ($request) {
     $req = new Request($request->params);
     $res = new Response();
-    $contact = new Contacts();
+    $contact = new Contacts(getTypeConnection());
 
     $response = $contact->updateAction($req->getJSON(), $req->params[0]);
 
@@ -47,11 +48,36 @@ Router::put('/contacts/([0-9]*)', function ($request) {
 Router::delete('/contacts/([0-9]*)', function ($request) {
     $req = new Request($request->params);
     $res = new Response();
-    $contact = new Contacts();
+    $contact = new Contacts(getTypeConnection());
 
     $response = $contact->deleteAction($req->getJSON(), $req->params[0]);
 
     $res->status(200)->toJSON($response);
+});
+
+Router::put('/connection', function ($request) {
+    $req = new Request($request->params);
+    $res = new Response();
+
+    $type = $req->getJSON()->type;
+
+    setTypeConnection($type);
+
+    $res->status(200)->toJSON([
+        "status" => true,
+        "message" => "Successfully changed connection type",
+        "data" => $type
+    ]);
+});
+
+Router::get('/connection', function () {
+    $res = new Response();
+
+    $res->status(200)->toJSON([
+        "status" => true,
+        "message" => "Connection type",
+        "data" => getTypeConnection()
+    ]);
 });
 
 Router::get('/(.*)', function () {

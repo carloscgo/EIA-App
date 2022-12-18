@@ -2,32 +2,10 @@
 
 namespace App\Controller;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use App\Lib\Config;
 
-
-class Contacts
+class Contacts extends Main
 {
-    private $client;
-
-    public function __construct()
-    {
-        $hostAPI = Config::get('CONNECTION')['API']['host'];
-
-        $this->client = new Client([
-            'base_uri' => $hostAPI,
-            'timeout'  => 2.0,
-        ]);
-    }
-
-    private function response($request)
-    {
-        $res = $this->client->sendAsync($request)->wait();
-
-        return $res->getBody()->getContents();
-    }
-
     public function allAction()
     {
         $request = new Request('GET', '/contacts', [], '');
