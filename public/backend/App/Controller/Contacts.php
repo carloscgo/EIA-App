@@ -6,6 +6,8 @@ use App\Model\Contact as Model;
 
 class Contacts extends Model
 {
+    private $existsEmailMessage = 'El email ya existe para otro contacto';
+
     private function validate($fields)
     {
         $error = [];
@@ -34,13 +36,25 @@ class Contacts extends Model
         return self::all();
     }
 
-    public function findAction(int $id)
+    public function findAction($id)
     {
         return self::findById($id);
     }
 
     public function newAction($contact)
     {
+        $exists = (array) self::findByField(
+            ['email'],
+            [$contact->email],
+            ["`%s` = '%s'"]
+        )['data'];
+
+        if (!empty($exists)) {
+            return getErrors([
+                $this->existsEmailMessage
+            ]);
+        }
+
         $errors = $this->validate($contact);
 
         if (!empty($errors)) {
@@ -52,6 +66,18 @@ class Contacts extends Model
 
     public function updateAction($contact, $id)
     {
+        $exists = (array) self::findByField(
+            ['email', 'id'],
+            [$contact->email, $id],
+            ["`%s` = '%s'", "`%s` != %d"]
+        )['data'];
+
+        if (!empty($exists)) {
+            return getErrors([
+                $this->existsEmailMessage
+            ]);
+        }
+
         $errors = $this->validate($contact);
 
         if (!empty($errors)) {
@@ -61,7 +87,7 @@ class Contacts extends Model
         return self::change($contact, $id);
     }
 
-    public function deleteAction(object $params, int $id)
+    public function deleteAction($params, $id)
     {
         return self::deleteById($params, $id);
     }

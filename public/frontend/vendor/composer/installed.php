@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '19ff3dffcc75ff56289d8c107b16b8c8a334ff49',
+        'reference' => 'a0fd939bcdf1f4c69c064ff520f205cd43356b3c',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '19ff3dffcc75ff56289d8c107b16b8c8a334ff49',
+            'reference' => 'a0fd939bcdf1f4c69c064ff520f205cd43356b3c',
             'dev_requirement' => false,
         ),
         'monolog/monolog' => array(

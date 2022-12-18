@@ -9,14 +9,11 @@
 		}
 	],
 	"autoload": {
-		"classmap": [
-			"./controllers/contacts"
-		],
+		"psr-4": {
+			"App\\": "App/"
+		},
 		"files": [
-			"../include/config.php",
-			"../include/clase_db.inc.php",
-			"../include/funciones.php",
-			"../include/session_header_admin.php"
+			"App/Lib/Helpers.php"
 		]
 	}
 }

@@ -4,6 +4,8 @@ namespace App\Lib;
 
 class Router
 {
+    private static $routeExists = false;
+
     public static function get($route, $callback)
     {
         if (strcasecmp($_SERVER['REQUEST_METHOD'], 'GET') !== 0) {
@@ -47,7 +49,9 @@ class Router
         $regex = str_replace('/', '\/', $regex);
         $isMatch = preg_match('/^' . ($regex) . '$/', $params, $matches, PREG_OFFSET_CAPTURE);
 
-        if ($isMatch) {
+        if ($isMatch && !self::$routeExists) {
+            self::$routeExists = true;
+
             // first value is normally the route, lets remove it
             array_shift($matches);
             // Get the matches as parameters

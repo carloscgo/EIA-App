@@ -37,11 +37,11 @@ class Contact extends Connection
         ];
     }
 
-    public static function findById(int $id)
+    public static function findById($id)
     {
         $status = false;
         $message = self::$messages->CONNECTION->noRecords;
-        $data = [];
+        $data = (object) [];
 
         try {
             $sql = "SELECT id, firstname, lastname, email, phone, created_at, updated_at
@@ -67,11 +67,46 @@ class Contact extends Connection
         ];
     }
 
-    public static function add(object $contact)
+    public static function findByField($fields, $values, $casts)
     {
         $status = false;
         $message = self::$messages->CONNECTION->noRecords;
-        $data = [];
+        $data = (object) [];
+
+        try {
+            $sql = "SELECT id, firstname, lastname, email, phone, created_at, updated_at
+				FROM `%s`
+				WHERE deleted_at IS NULL";
+
+            $sql = sprintf($sql, self::$table);
+
+            foreach ($fields as $key => $field) {
+                $sql .= sprintf(" AND $casts[$key]", $fields[$key], $values[$key]);
+            }
+
+            $rs = self::query($sql);
+
+            if ($row = self::fetchSingle($rs)) {
+                $status = true;
+                $message = 'A single contact';
+                $data = $row;
+            }
+        } catch (\Exception $e) {
+            $message = self::$messages->CONNECTION->error . '\n' . $e->getMessage();
+        }
+
+        return [
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ];
+    }
+
+    public static function add($contact)
+    {
+        $status = false;
+        $message = self::$messages->CONNECTION->noRecords;
+        $data = (object) [];
 
         try {
             $into  = "firstname, lastname, email, phone";
@@ -101,11 +136,11 @@ class Contact extends Connection
         ];
     }
 
-    public static function change(object $contact, int $id)
+    public static function change($contact, $id)
     {
         $status = false;
         $message = self::$messages->CONNECTION->noRecords;
-        $data = [];
+        $data = (object) [];
 
         try {
             $set = "firstname = '%s',
@@ -116,7 +151,7 @@ class Contact extends Connection
             $rs = self::update(
                 self::$table,
                 sprintf($set, $contact->firstname, $contact->lastname, $contact->email, $contact->phone),
-                sprintf("id = %d", $id),
+                sprintf("id = %d", $id)
             );
 
             if ($rs) {
@@ -137,11 +172,11 @@ class Contact extends Connection
         ];
     }
 
-    public static function deleteById(object $params, int $id)
+    public static function deleteById($params, $id)
     {
         $status = false;
         $message = self::$messages->CONNECTION->noRecords;
-        $data = [];
+        $data = (object) [];
 
         try {
             if (@$params->permanent) {

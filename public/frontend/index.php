@@ -21,12 +21,30 @@ Router::get('/post/([0-9]*)', function (Request $req, Response $res) {
     ]);
 });
 
-Router::get('/contacts', function (Request $req, Response $res) {
+Router::get('/contacts', function (Response $res) {
     $res->toJSON((new Contacts())->allAction());
 });
 
 Router::get('/contacts/([0-9]*)', function (Request $req, Response $res) {
     $res->toJSON((new Contacts())->findAction($req->params[0]));
+});
+
+Router::post('/contacts', function (Request $req, Response $res) {
+    $response = (new Contacts())->newAction($req->getJSON());
+
+    $res->status(201)->toJSON($response);
+});
+
+Router::put('/contacts/([0-9]*)', function (Request $req, Response $res) {
+    $response = (new Contacts())->updateAction($req->getJSON(), $req->params[0]);
+
+    $res->status(200)->toJSON($response);
+});
+
+Router::delete('/contacts/([0-9]*)', function (Request $req, Response $res) {
+    $response = (new Contacts())->deleteAction($req->getJSON(), $req->params[0]);
+
+    $res->status(200)->toJSON($response);
 });
 
 App::run();
