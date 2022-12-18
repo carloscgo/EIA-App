@@ -110,10 +110,6 @@
             "rest",
             "web service"
         ],
-        "support": {
-            "issues": "https://github.com/guzzle/guzzle/issues",
-            "source": "https://github.com/guzzle/guzzle/tree/7.5.0"
-        },
         "funding": [
             {
                 "url": "https://github.com/GrahamCampbell",
@@ -196,10 +192,6 @@
         "keywords": [
             "promise"
         ],
-        "support": {
-            "issues": "https://github.com/guzzle/promises/issues",
-            "source": "https://github.com/guzzle/promises/tree/1.5.2"
-        },
         "funding": [
             {
                 "url": "https://github.com/GrahamCampbell",
@@ -317,10 +309,6 @@
             "uri",
             "url"
         ],
-        "support": {
-            "issues": "https://github.com/guzzle/psr7/issues",
-            "source": "https://github.com/guzzle/psr7/tree/2.4.3"
-        },
         "funding": [
             {
                 "url": "https://github.com/GrahamCampbell",
@@ -385,10 +373,7 @@
             "http-client",
             "psr",
             "psr-18"
-        ],
-        "support": {
-            "source": "https://github.com/php-fig/http-client/tree/master"
-        }
+        ]
     },
     {
         "name": "psr/http-factory",
@@ -442,10 +427,7 @@
             "psr-7",
             "request",
             "response"
-        ],
-        "support": {
-            "source": "https://github.com/php-fig/http-factory/tree/master"
-        }
+        ]
     },
     {
         "name": "psr/http-message",
@@ -497,10 +479,7 @@
             "psr-7",
             "request",
             "response"
-        ],
-        "support": {
-            "source": "https://github.com/php-fig/http-message/tree/master"
-        }
+        ]
     },
     {
         "name": "ralouphie/getallheaders",
@@ -542,11 +521,7 @@
                 "email": "ralph.khattar@gmail.com"
             }
         ],
-        "description": "A polyfill for getallheaders.",
-        "support": {
-            "issues": "https://github.com/ralouphie/getallheaders/issues",
-            "source": "https://github.com/ralouphie/getallheaders/tree/develop"
-        }
+        "description": "A polyfill for getallheaders."
     },
     {
         "name": "symfony/deprecation-contracts",
