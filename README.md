@@ -26,3 +26,8 @@ composer run-script docker-install-back
 # Instalar paquetes composer de ambos proyectos frontend y backend simultaneamente
 composer run-script docker-install-back
 ```
+
+## URLs para acceso a los servicios
+
+- `Frontend`: http://localhost:8083
+- `PhpMyadmin`: http://localhost:8088
