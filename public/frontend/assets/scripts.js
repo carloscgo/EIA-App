@@ -103,6 +103,8 @@ const checkResponse = (response, callback = undefined) => {
 }
 
 const loadContacts = () => {
+    $('#content tbody').html('')
+
     $.ajax({
         url: '/api/contacts',
         dataType: 'json',
@@ -113,8 +115,6 @@ const loadContacts = () => {
         },
         beforeSend: function () {
             loading(true);
-
-            $('#content tbody').html('')
         },
         success: function (response) {
             if (response.status) {
