@@ -1,0 +1,131 @@
+body {
+    min-height: 75rem;
+    padding-top: 4.5rem;
+    position: relative;
+}
+
+nav {
+    background-color: var(--bs-gray-700);
+}
+
+nav .active,
+nav .active .bi::before {
+    color: var(--bs-cyan) !important;
+}
+
+nav *:not(input[type="search"]):not(.active) {
+    color: var(--bs-white) !important;
+}
+
+tr:hover {
+    cursor: pointer;
+}
+
+tr > td:last-child,
+tr > th:last-child {
+    width: 120px;
+    text-align: center;
+}
+
+.btn-delete .bi::before {
+    color: var(--bs-danger) !important;
+}
+
+.btn-edit .bi::before {
+    color: var(--bs-primary) !important;
+}
+
+.btn-delete:hover,
+.btn-edit:hover {
+    opacity: 0.8;
+}
+
+.loading {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    z-index: 100;
+    top: 0;
+    left: 0;
+}
+
+.loading .overlay {
+    position: relative;
+    z-index: 0;
+    background-color: var(--bs-white);
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+}
+
+.loading .animation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    width: 80px;
+    height: 80px;
+}
+
+.loading .animation div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--bs-blue);
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.loading .animation div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+
+.loading .animation div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.loading .animation div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.loading .animation div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0);
+    }
+}
+
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(24px, 0);
+    }
+}

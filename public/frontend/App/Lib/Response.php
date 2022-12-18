@@ -17,6 +17,6 @@ class Response
     {
         http_response_code($this->status);
         header('Content-Type: application/json');
-        echo json_encode($data);
+        echo $data;
     }
 }

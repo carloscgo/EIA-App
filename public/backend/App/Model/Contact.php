@@ -21,10 +21,13 @@ class Contact extends Connection
 
             $rs = self::query(sprintf($sql, self::$table));
 
-            if ($row = self::fetchArray($rs)) {
+            while ($row = self::fetchArray($rs)) {
+                $data[] = $row;
+            }
+
+            if (count($data)) {
                 $status = true;
                 $message = 'Contact list';
-                $data = $row;
             }
         } catch (\Exception $e) {
             $message = self::$messages->CONNECTION->error . '\n' . $e->getMessage();

@@ -2,67 +2,70 @@
 
 namespace App\Controller;
 
-use App\Model\Contact as Model;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use App\Lib\Config;
 
-class Contacts extends Model
+
+class Contacts
 {
-    private function validate($fields)
+    private $client;
+
+    public function __construct()
     {
-        $error = [];
+        $hostAPI = Config::get('CONNECTION')['API']['host'];
 
-        if (empty($fields->firstname) || strlen($fields->firstname) > 45) {
-            $error[] = 'El campo `firstname` es invalido';
-        }
+        $this->client = new Client([
+            'base_uri' => $hostAPI,
+            'timeout'  => 2.0,
+        ]);
+    }
 
-        if (empty($fields->lastname) || strlen($fields->lastname) > 45) {
-            $error[] = 'El campo `lastname` es invalido';
-        }
+    private function response($request)
+    {
+        $res = $this->client->sendAsync($request)->wait();
 
-        if (!validateEmail($fields->email)) {
-            $error[] = 'El `email` es invalido';
-        }
-
-        if (empty($fields->phone) || strlen($fields->phone) > 15 || !validatePhone($fields->phone)) {
-            $error[] = 'El campo `phone` es invalido';
-        }
-
-        return $error;
+        return $res->getBody()->getContents();
     }
 
     public function allAction()
     {
-        return self::all();
+        $request = new Request('GET', '/contacts', [], '');
+
+        return $this->response($request);
     }
 
     public function findAction(int $id)
     {
-        return self::findById($id);
+        $request = new Request('GET', "/contacts/$id", [], '');
+
+        return $this->response($request);
     }
 
     public function newAction($contact)
     {
-        $errors = $this->validate($contact);
+        $request = new Request('POST', "/contacts", [
+            'Content-Type' => 'application/json'
+        ], json_encode((array) $contact));
 
-        if (!empty($errors)) {
-            return getErrors($errors);
-        }
-
-        return self::add($contact);
+        return $this->response($request);
     }
 
     public function updateAction($contact, $id)
     {
-        $errors = $this->validate($contact);
+        $request = new Request('PUT', "/contacts/$id", [
+            'Content-Type' => 'application/json'
+        ], json_encode((array) $contact));
 
-        if (!empty($errors)) {
-            return getErrors($errors);
-        }
-
-        return self::change($contact, $id);
+        return $this->response($request);
     }
 
-    public function deleteAction(object $params, int $id)
+    public function deleteAction($params, $id)
     {
-        return self::deleteById($params, $id);
+        $request = new Request('DELETE', "/contacts/$id", [
+            'Content-Type' => 'application/json'
+        ], json_encode((array) $params));
+
+        return $this->response($request);
     }
 }

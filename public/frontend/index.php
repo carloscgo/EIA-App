@@ -10,41 +10,74 @@ use App\Lib\Response;
 use App\Controller\Contacts;
 
 Router::get('/', function () {
-    echo 'Hello World';
+  require_once __DIR__ . '/App/Controller/Home.php';
 });
 
-Router::get('/post/([0-9]*)', function (Request $req, Response $res) {
-    echo 'post';
-    $res->toJSON([
-        'post' =>  ['id' => $req->params[0]],
-        'status' => 'ok'
-    ]);
+Router::get('/contact/new', function () {
+  $title = 'Add Contact';
+  $action = 'new';
+
+  require_once __DIR__ . '/App/Controller/Form.php';
 });
 
-Router::get('/contacts', function (Response $res) {
-    $res->toJSON((new Contacts())->allAction());
+Router::get('/contact/edit/([0-9]*)', function ($request) {
+  $title = 'Update Contact';
+  $action = 'edit';
+  $id = $request->params[0];
+
+  require_once __DIR__ . '/App/Controller/Form.php';
 });
 
-Router::get('/contacts/([0-9]*)', function (Request $req, Response $res) {
-    $res->toJSON((new Contacts())->findAction($req->params[0]));
+Router::get('/api/contacts', function () {
+  $res = new Response();
+
+  $contact = new Contacts();
+
+  $res->status(200)->toJSON($contact->allAction());
 });
 
-Router::post('/contacts', function (Request $req, Response $res) {
-    $response = (new Contacts())->newAction($req->getJSON());
+Router::get('/api/contacts/([0-9]*)', function ($request) {
+  $res = new Response();
 
-    $res->status(201)->toJSON($response);
+  $contact = new Contacts();
+
+  $res->status(200)->toJSON($contact->findAction($request->params[0]));
 });
 
-Router::put('/contacts/([0-9]*)', function (Request $req, Response $res) {
-    $response = (new Contacts())->updateAction($req->getJSON(), $req->params[0]);
+Router::post('/api/contacts', function ($request) {
+  $req = new Request($request->params);
+  $res = new Response();
 
-    $res->status(200)->toJSON($response);
+  $contact = new Contacts();
+
+  $res->status(201)->toJSON($contact->newAction($req->getJSON()));
 });
 
-Router::delete('/contacts/([0-9]*)', function (Request $req, Response $res) {
-    $response = (new Contacts())->deleteAction($req->getJSON(), $req->params[0]);
+Router::put('/api/contacts/([0-9]*)', function ($request) {
+  $req = new Request($request->params);
+  $res = new Response();
 
-    $res->status(200)->toJSON($response);
+  $contact = new Contacts();
+
+  $res->status(200)->toJSON($contact->updateAction($req->getJSON(), $req->params[0]));
+});
+
+Router::delete('/api/contacts/([0-9]*)', function ($request) {
+  $req = new Request($request->params);
+  $res = new Response();
+
+  $contact = new Contacts();
+
+  $res->status(200)->toJSON($contact->deleteAction($req->getJSON(), $req->params[0]));
+});
+
+Router::get('/api/(.*)', function () {
+  $res = new Response();
+
+  $res->status(404)->toJSON([
+    "status" => false,
+    "message" => "Resource not found"
+  ]);
 });
 
 App::run();
