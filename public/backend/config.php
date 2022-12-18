@@ -4,12 +4,15 @@ return [
     'CONNECTION' => [
         'DEFAULT' => 'MYSQL',
         'MYSQL' => [
-            'adapter'     => 'Mysql',
             'host'        => 'mariadb',
             'username'    => 'user',
             'password'    => 'secret',
             'dbname'      => 'db',
             'charset'     => 'utf8',
+        ],
+        'MONGO' => [
+            'host'        => 'mongodb',
+            'dbname'      => 'db'
         ]
     ],
     'MESSAGES' => [

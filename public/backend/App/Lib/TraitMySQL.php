@@ -10,28 +10,14 @@ trait TraitMySQL
     private static $password = null;
     private static $encoding = null;
     private static $error = null;
-
-    public static $connection = null;
     private static $queryID = null;
-    public static $messages = [];
-
-    public static function getError()
-    {
-        return self::$error;
-    }
-
-    public static function getDB()
-    {
-        return self::$db;
-    }
+    private static $connection = null;
 
     public static function connectionMySQL()
     {
         self::$connection = new \mysqli(self::$server, self::$user, self::$password, self::$db);
 
-        if (self::$connection->connect_error) {
-            header('location:/');
-        } else {
+        if (!self::$connection->connect_error) {
             self::$connection->query("SET NAMES " . self::$encoding);
         }
     }
@@ -58,6 +44,17 @@ trait TraitMySQL
             }
         } catch (\Exception $e) {
             self::$error = $e->getMessage();
+
+            return 0;
+        }
+    }
+
+    public static function insertID()
+    {
+        try {
+            return self::$connection->insert_id;
+        } catch (\Exception $e) {
+            self::$error = 'No se ha logrado capturar el ID del ultimo registro';
 
             return 0;
         }
@@ -91,32 +88,6 @@ trait TraitMySQL
 
             return 0;
         }
-    }
-
-    public static function affectedRows()
-    {
-        try {
-            return self::$connection->affected_rows;
-        } catch (\Exception $e) {
-            self::$error = $e->getMessage();
-
-            return 0;
-        }
-    }
-
-    public static function beginTransaction()
-    {
-        self::$connection->autocommit(FALSE);
-    }
-
-    public static function commitTransaction()
-    {
-        self::$connection->commit();
-    }
-
-    public static function rollbackTransaction()
-    {
-        self::$connection->rollback();
     }
 
     public static function query($sql = "")
@@ -248,17 +219,6 @@ trait TraitMySQL
             }
         } catch (\Exception $e) {
             self::$error = $e->getMessage() . ': ' . $e->getCode();
-
-            return 0;
-        }
-    }
-
-    public static function insertID()
-    {
-        try {
-            return self::$connection->insert_id;
-        } catch (\Exception $e) {
-            self::$error = 'No se ha logrado capturar el ID del ultimo registro';
 
             return 0;
         }
