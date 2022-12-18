@@ -81,7 +81,7 @@ $hostAPI = Config::get('CONNECTION')['API']['host'];
               <button class="w-100 btn btn-primary btn-lg" type="submit">Save</button>
             </div>
             <div class="col-sm-6 mx-auto">
-              <a class="w-100 btn btn-light btn-lg" role="button" href="/">Cancel</a>
+              <a class="w-100 btn btn-light btn-lg" role="button" href="/">Go back</a>
             </div>
           </div>
         </form>
@@ -93,9 +93,9 @@ $hostAPI = Config::get('CONNECTION')['API']['host'];
 
   <script>
     $(document).ready(function() {
-      $('#content').show()
+      setActiveLink('last')
 
-      validateForm()
+      $('#content').show()
 
       <?php
       if ($action === 'edit') { ?>
@@ -103,11 +103,13 @@ $hostAPI = Config::get('CONNECTION')['API']['host'];
       <?php } ?>
 
       $('#content form').submit(function(event) {
+        validateForm()
+
         <?php
         if ($action === 'new') { ?>
           addContact(event);
         <?php } else { ?>
-          updateContact(event);
+          updateContact(event, <?= $id ?>);
         <?php } ?>
       });
     })

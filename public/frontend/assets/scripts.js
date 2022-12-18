@@ -2,6 +2,11 @@ $('#content').hide()
 $('#loading').hide()
 $('#toast').hide()
 
+const setActiveLink = (element) => {
+    $('#navbarCollapse .nav-link').removeClass('active')
+    $(`#navbarCollapse .nav-link:${element}`).addClass('active')
+}
+
 const loading = (show) => {
     if (show) {
         $('#loading').show()
@@ -66,10 +71,14 @@ const formatData = () => {
 }
 
 const cleanForm = () => {
-    $('#firstname').val('')
-    $('#lastname').val('')
-    $('#email').val('')
-    $('#phone').val('')
+    $('#content form').removeClass('was-validated')
+
+    setTimeout(() => {
+        $('#firstname').val('')
+        $('#lastname').val('')
+        $('#email').val('')
+        $('#phone').val('')
+    }, 200)
 }
 
 const validForm = () => {

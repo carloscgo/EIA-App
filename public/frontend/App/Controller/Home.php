@@ -54,6 +54,8 @@ $hostAPI = Config::get('CONNECTION')['API']['host'];
   <script>
     $(document).ready(function() {
       loadContacts()
+
+      setActiveLink('first')
     })
   </script>
 </body>
