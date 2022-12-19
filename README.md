@@ -24,7 +24,7 @@ composer run-script docker-install-back
 
 ```bash
 # Instalar paquetes composer de ambos proyectos frontend y backend simultaneamente
-composer run-script docker-install-back
+composer run-script docker-install-all
 ```
 
 ## URLs para acceso a los servicios
